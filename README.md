@@ -12,15 +12,15 @@ New towns and land value capture: https://www.centreforcities.org/publication/re
 
  Data available is as follows:
  
-- Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
+- Folder 1: Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
 
-- 'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
+- Folder 2:'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
 
-- R scripts used to knit these annual reports together, and combine them with other datasets to produce stock estimates and continuous datasets to the present-day in the output workbooks.
+- Folder 3: R scripts used to knit these annual reports together, and combine them with other datasets to produce stock estimates and continuous datasets to the present-day in the output workbooks.
 
-- A workbook containing data on housebuilding, public and private, by new town development corporations between 1950 and 1992 is also available. 
+- Folder 4: Data on housebuilding, public and private, by new town development corporations between 1950 and 1992 is also available. 
 
-- Geopackages containing the maps for novel geographies used in this data series, for pre-1974 local authorities and 1981 counties. They are built using original maps from the ONS Open Geography Portal and released under the Open Government Licence v3.0.
+- Folder 5: Geopackages containing the maps for novel geographies used in this data series, for pre-1974 local authorities and 1981 counties. They are built using original maps from the ONS Open Geography Portal and released under the Open Government Licence v3.0.
 
 ## How we got this data 
 This data is mostly the product of a digitisation project led by the Centre for Cities in 2024. 
@@ -42,7 +42,7 @@ We have compiled this data into useable workbooks and attached it to publicly av
 R, Microsoft Excel 
 
 ### Get quickly into the data 
-The easiest way to make the most of this dataset is to use the ready-made workbooks available in the folder entitled: Housebuilding (gross and rates), housing stock, demolitions, and population data, 1945-2022 
+The easiest way to make the most of this dataset is to use the ready-made workbooks available in Folder 1. 
 
 File names give first the geography, then the content of the workbooks. The ReadMe in the folder details the data used and notes any reasons the data may be unreliable for particular geographies. 
 
@@ -51,9 +51,8 @@ https://www.data.gov.uk/dataset/288458f7-7789-47d0-80d4-ffdf746c6b75/local-autho
 
 ### Replicate our work 
 If users wish, they can replicate Centre for Cities' work using the files made available here and Government data sources. To do so, users should: 
-- download all the files in folder entitled: Digitised annual housebuilding reports, England, 1946, 1950-51, 1953-2000
-- download additional assets from folder entitled: Additional assets
-- download the R scripts, and edit all file names and pathways in the scripts to match their computer and downloaded files
+- download all the files in Folders 2 and 6.
+- download the R scripts from Folder 3, and edit all file names and pathways in the scripts to match their computer and downloaded files
 - download Government data sources (see below).  
 
 We anticipate that doing this would be a lot of work - our intention in uploading raw files and R scripts is more for transparency purposes than because we think replicating the work would be worth anyone's time! 
