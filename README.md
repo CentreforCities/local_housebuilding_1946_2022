@@ -12,7 +12,7 @@ New towns and land value capture: https://www.centreforcities.org/publication/re
 
  Data available is as follows:
  
-- Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here
+- Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
 
 - 'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
 
