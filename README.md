@@ -11,14 +11,16 @@ Social housing and the public sector: https://www.centreforcities.org/event/rest
 New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
  Data available is as follows:
+ 
+- Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here
+
 - 'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
 
-- R scripts used to knit these annual reports together, and combine them with other datasets to produce stock estimates and continuous datasets to the present-day. 
+- R scripts used to knit these annual reports together, and combine them with other datasets to produce stock estimates and continuous datasets to the present-day in the output workbooks.
 
-- Output workbooks - the products of the R scripts, useful for those wanting to quickly get into the data.
-These workbooks contain total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. 
+- A workbook containing data on housebuilding, public and private, by new town development corporations between 1950 and 1992 is also available. 
 
-A separate workbook containing data on housebuilding, public and private, by new town development corporations between 1950 and 1992 is also available. 
+- Geopackages containing the maps for each geography contained in the dataseries, originally from the ONS Open Geography Portal and released under the Open Government Licence v3.0.
 
 ## How we got this data 
 This data is mostly the product of a digitisation project led by the Centre for Cities in 2024. 
