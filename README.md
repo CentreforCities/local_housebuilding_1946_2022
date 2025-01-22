@@ -27,16 +27,19 @@ We digitised this data using a combination of OCR and manual data entry and chec
 
 We have compiled this data into useable workbooks and attached it to publicly available data on housebuilding, housing stock and population so that the data runs up to the present day.   
 
-## Get access to this data 
-The Centre for Cities wants to make the data available to others to use as easily as possible. We hope to make the data publicly available on GitHub in 2025. 
-
-If you would like to access the data now or have any questions, please contact Maurice Lange: m.lange@centreforcities.org 
-
 ## Roadmap
 
 - Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant intenral boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
 
-## Contributors 
+- Release Rateable Values workbooks in a similar manner on GitHub
+
+## Acknowledgements
+
+Thanks to Xuanru Lin, James Evans, and Tu Minh Tri for their help in building this database. 
+
+Thanks to the LSE Digital Library team for making such high quality scans publicly available and for very helpful answers to our questions early in this research project.
+
+If you have any questions, please contact Maurice Lange: m.lange@centreforcities.org and/or Anthony Breach a.breach@centreforcities.org
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
