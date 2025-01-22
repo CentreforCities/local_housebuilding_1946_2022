@@ -26,4 +26,4 @@ Notes on pre-1974 data:
 
 Notes on 1981 Counties geography:
 
-1981 county boundaries are chosen as the best geography to enable analysis over the entire period. Most local authority districts at pre- and post-1974 geographies fit exactly into 1981 counties. There are some minor cases where this isn't the case before and (apart from York, Herefordshire, and Boothferry as mentioned) to a lesser degree after 1974. Users can look at these discrepancies using the two shapefiles provided.
+- 1981 county boundaries are chosen as the best geography to enable analysis over the entire period. Most local authority districts at pre- and post-1974 geographies fit exactly into 1981 counties. There are some minor cases where this isn't the case before and (apart from York, Herefordshire, and Boothferry as mentioned) to a lesser degree after 1974. Users can look at these discrepancies using the two shapefiles provided.
