@@ -1,5 +1,5 @@
 # local_housebuilding_1946_2022
-Information about local authority housebuilding data 1946-2022, digitised and compiled in 2024 by Centre for Cities.   
+Information about local authority housebuilding data in England from 1946-2022, digitised and compiled in 2024 by Centre for Cities.   
 
 ## Description 
 This repository describes the data Centre for Cities can make available following data work carried out for the 2024 Restarting Housebuilding series: 
