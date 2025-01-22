@@ -35,6 +35,12 @@ We digitised this data using a combination of OCR and manual data entry and chec
 
 We have compiled this data into useable workbooks and attached it to publicly available data on housebuilding, housing stock and population so that the data runs up to the present day.   
 
+## Get started with this data 
+### Dependencies 
+R, Windows 10 or 11, Microsoft Excel 
+
+### External data sources
+
 ## Roadmap
 
 - Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant internal boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
