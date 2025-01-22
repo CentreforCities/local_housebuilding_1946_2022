@@ -5,7 +5,9 @@ Information about local authority housebuilding data in England from 1946-2022, 
 This repository describes the data Centre for Cities can make available following data work carried out for the 2024 Restarting Housebuilding series: 
 
 Planning reform and the private sector: https://www.centreforcities.org/publication/restarting-housebuilding-planning-reform-and-the-private-sector/
+
 Social housing and the public sector: https://www.centreforcities.org/event/restarting-housebuilding-social-housing-and-the-public-sector/
+
 New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
  Data available is as follows:
