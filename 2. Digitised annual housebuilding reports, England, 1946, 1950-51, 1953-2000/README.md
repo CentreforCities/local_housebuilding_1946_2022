@@ -4,7 +4,8 @@ To best understand the data in these files, we advise you to read the notes at t
 
 Note:
 
-- Extensive data-checking was undertaken to ensure that numbers match those in the scans as far as possible. We cannot guarantee that they match exactly as checking every number against the scans would be impossible.
+- Only 'COMPLETED' and 'DEMOLISHED' columns have been cleaned. Data on starts and 'in construction' need to be cleaned before use. 
+- Extensive data-checking of COMPLETED and DEMOLISHED columns was undertaken to ensure that numbers match those in the scans as far as possible. We cannot guarantee that they match exactly as checking every number against the scans would be impossible.
 - Where there were obvious errors in the original documents, we changed these in the digitised versions using best estimates and interpolation.
 - The housebuilding reports report cumulative housebuilding totals from April 1945 until 1966. After 1966, they switch to reporting building annually.
 - From 1996 onward, building numbers are reported by financial year, rather than calendar year.
