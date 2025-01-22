@@ -5,3 +5,5 @@ Where local authorities changed boundaries in complex ways (e.g. not a straightf
 It is not possible to capture all pre-1971 boundary changes by merging 1971 LAs in all cases (save for aggregating up to an unusably large geography). Where necessary, idiosycracies were accepted and best judgement was exercised on the bases of settlement locations. 
 
 The 1981 counties geopackage is based on the 1981 county boundaries, with London counties merged to current Greater London boundaries. County-level data in this repository match to these geographies as far as possible. 
+
+These geopackages are ultimately based upon work released by the ONS Open Geography Portal under the Open Government Licence v3.0.
