@@ -3,7 +3,12 @@ Information about local authority housebuilding data 1946-2022, digitised and co
 
 ## Description 
 This repository describes the data Centre for Cities can make available following data work carried out for the 2024 Restarting Housebuilding series: 
-https://www.centreforcities.org/housing/ 
+
+Planning reform and the private sector: https://www.centreforcities.org/publication/restarting-housebuilding-planning-reform-and-the-private-sector/
+
+Social housing and the public sector: https://www.centreforcities.org/event/restarting-housebuilding-social-housing-and-the-public-sector/
+
+New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
  Data available is as follows:
 - 'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
@@ -19,8 +24,11 @@ A separate workbook containing data on housebuilding, public and private, by new
 This data is mostly the product of a digitisation project led by the Centre for Cities in 2024. 
 
 The London School of Economics Digital Library provided us with scans of housebuilding reports from 1946 through to 2000. They have now been uploaded to the LSE Online library here: 
+
 https://lse-atom.arkivum.net/uklse-dl1eh01008 
+
 https://lse-atom.arkivum.net/uklse-dl1eh01009
+
 https://lse-atom.arkivum.net/uklse-dl1eh01010
 
 We digitised this data using a combination of OCR and manual data entry and checking. The digitised data is now free of any noticeable errors. Where there were obvious errors in the source data, this was corrected as best made sense given contextual data. Small errors may have slipped through the checking process, so digitised and scanned data may not 100% match. 
