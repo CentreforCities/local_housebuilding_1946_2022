@@ -35,11 +35,35 @@ We digitised this data using a combination of OCR and manual data entry and chec
 
 We have compiled this data into useable workbooks and attached it to publicly available data on housebuilding, housing stock and population so that the data runs up to the present day.   
 
-## Get started with this data 
+## Using this data 
 ### Dependencies 
-R, Windows 10 or 11, Microsoft Excel 
+R, Microsoft Excel 
+
+### Get quickly into the data 
+The easiest way to make the most of this dataset is to use the ready-made workbooks available in the folder entitled: Housebuilding (gross and rates), housing stock, demolitions, and population data, 1945-2022 
+
+File names give first the geography, then the content of the workbooks. The ReadMe in the folder details the data used and notes any reasons the data may be unreliable for particular geographies. 
+
+Users can also download geopackages to map data at pre-1974 local authority and county-level geographies. Users wanting to map 2023 local authorities can find the appropriate geopackage here: 
+https://www.data.gov.uk/dataset/288458f7-7789-47d0-80d4-ffdf746c6b75/local-authority-districts-december-2023-boundaries-uk-bfe 
+
+## Replicate our work 
+If users wish, they can replicate Centre for Cities' work using the files made available here and Government data sources. To do so, users should: 
+- download all the files in folder entitled: Digitised annual housebuilding reports, England, 1946, 1950-51, 1953-2000
+- download additional assets from folder entitled: Additional assets
+- download the R scripts, and edit all file names and pathways in the scripts to match their computer and downloaded files
+- download Government data sources (see below).  
+
+We anticipate that doing this would be a lot of work - our intention in uploading raw files and R scripts is more for transparency purposes than because we think replicating the work would be worth anyone's time! 
 
 ### External data sources
+External data is gathered from the Ministry of Housing, Communities and Local Government, and the Office for National Statistics. All below links are functional at the time of writing but may be updated by MHCLG and the ONS as they release new data.
+
+Population Estimates for England and Wales: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/estimatesofthepopulationforenglandandwales
+Historic Census data on 'household spaces' and 'households': NOMIS - https://www.nomisweb.co.uk/ 
+MHCLG Table 253: https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
+MHCLG Affordable Housing Open Data (processed by Script 0 into useable range of formats): https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
+MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants  
 
 ## Roadmap
 
