@@ -32,6 +32,12 @@ The Centre for Cities wants to make the data available to others to use as easil
 
 If you would like to access the data now or have any questions, please contact Maurice Lange: m.lange@centreforcities.org 
 
+## Roadmap
+
+- Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant intenral boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
+
+## Contributors 
+
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
 This work is licensed under a
