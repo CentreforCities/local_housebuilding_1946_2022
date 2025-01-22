@@ -29,7 +29,7 @@ We have compiled this data into useable workbooks and attached it to publicly av
 
 ## Roadmap
 
-- Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant intenral boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
+- Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant internal boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
 
 - Release Rateable Values workbooks in a similar manner on GitHub
 
