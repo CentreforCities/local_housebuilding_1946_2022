@@ -31,3 +31,14 @@ We have compiled this data into useable workbooks and attached it to publicly av
 The Centre for Cities wants to make the data available to others to use as easily as possible. We hope to make the data publicly available on GitHub in 2025. 
 
 If you would like to access the data now or have any questions, please contact Maurice Lange: m.lange@centreforcities.org 
+
+Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
+
+This work is licensed under a
+[Creative Commons Attribution 4.0 International License][cc-by].
+
+[![CC BY 4.0][cc-by-image]][cc-by]
+
+[cc-by]: http://creativecommons.org/licenses/by/4.0/
+[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
