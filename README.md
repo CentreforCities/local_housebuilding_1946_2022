@@ -61,9 +61,13 @@ We anticipate that doing this would be a lot of work - our intention in uploadin
 External data is gathered from the Ministry of Housing, Communities and Local Government, and the Office for National Statistics. All below links are functional at the time of writing but may be updated by MHCLG and the ONS as they release new data.
 
 Population Estimates for England and Wales: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/estimatesofthepopulationforenglandandwales
+
 Historic Census data on 'household spaces' and 'households': NOMIS - https://www.nomisweb.co.uk/ 
+
 MHCLG Table 253: https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
+
 MHCLG Affordable Housing Open Data (processed by Script 0 into useable range of formats): https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
+
 MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants  
 
 ## Roadmap
