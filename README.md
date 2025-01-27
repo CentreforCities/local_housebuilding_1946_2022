@@ -81,6 +81,8 @@ MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables
 
 - Release Rateable Values workbooks in a similar manner on GitHub
 
+- Edit code so it longer produces obsolete columns in the middle of the data series
+
 ## Acknowledgements
 
 Thanks to Xuanru Lin, James Evans, and Tu Minh Tri for their help in building this database. 
