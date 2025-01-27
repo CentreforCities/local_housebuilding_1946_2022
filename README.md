@@ -37,6 +37,9 @@ We digitised this data using a combination of OCR and manual data entry and chec
 
 We have compiled this data into useable workbooks and attached it to publicly available data on housebuilding, housing stock and population so that the data runs up to the present day.   
 
+From 2010 onwards, known issues with official government tables on housebuilding by tenure mean the results are slight underestimates, particularly for private housebuilding. This was chosen to ensure consistency across the long-run of the dataset for the Restarting Housebuilding reports, as it does not affect the analysis of any of the three papers. We are currently considering whether to amend this or provide an alternative metric, and in the meantime, users should treat the post-2010 data with caution and be conscious they are potentially subject to change. Analysis which focuses solely on the past fifteen years or so would probably be wiser to use an alternative source - if you would like advice on which data to consult then please get in touch.
+
+
 ## Using this data 
 ### Dependencies 
 R, Microsoft Excel 
@@ -71,6 +74,8 @@ MHCLG Affordable Housing Open Data (processed by Script 0 into useable range of 
 MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants  
 
 ## Roadmap
+
+- Review post-2010 data on housebuilding
 
 - Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant internal boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
 

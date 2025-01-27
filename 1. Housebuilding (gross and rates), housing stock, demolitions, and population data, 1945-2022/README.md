@@ -17,6 +17,7 @@ Notes on post-1974 data:
 - From 1991 onward, public housebuilding at local authority level taken from Table 1011. After 2000, MHCLG Table 253 is used for private housebuilding local authority level housebuilding data. Housing stock is from MHCLG Table 125 (unrounded). Population data is from ONS after 1992.
 - Where data is missing from MHCLG Table 253, we fill gaps by interpolating.
 - Minor boundary changes in the 1990s are not reflected in the estimates. The effect of this will be very small everywhere, except in three places - York (which expanded outwards), Herefordshire and Worcestershire, and Boothferry in Humberside. In these three cases in particular, the 1981 county geography is the best option for local estimates.
+- After 2010, known issues with the Government's own data mean that the total results are underestimates, particularly for private housebuilding. We are currently reviewing this post-2010 data and it may change - please get in touch if you have any questions or comments.
 
 Notes on pre-1974 data:
 
