@@ -6,7 +6,7 @@ This repository describes the data Centre for Cities can make available followin
 
 Planning reform and the private sector: https://www.centreforcities.org/publication/restarting-housebuilding-planning-reform-and-the-private-sector/
 
-Social housing and the public sector: https://www.centreforcities.org/event/restarting-housebuilding-social-housing-and-the-public-sector/
+Social housing and the public sector: https://www.centreforcities.org/publication/restarting-housebuilding-ii-social-housing-and-the-public-sector/
 
 New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
@@ -85,7 +85,7 @@ MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables
 
 ## Acknowledgements
 
-Thanks to Xuanru Lin, James Evans, and Tu Minh Tri for their help in building this database. 
+Thanks to Xuanru Lin, James Evans, Tu Minh Tri, and Addi Haran Diman for their help in building this database. 
 
 Thanks to the LSE Digital Library team for making such high quality scans publicly available and for very helpful answers to our questions early in this research project.
 
