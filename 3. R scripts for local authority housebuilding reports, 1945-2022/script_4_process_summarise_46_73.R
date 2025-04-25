@@ -6,6 +6,9 @@ library(ggplot2)
 library(tidyr)
 library(purrr) 
 
+#set directory workaround
+dirname <- sub("^(([^/]+/){2}[^/]+).*", "\\1", dirname("~"))
+
 #excel write function 
 # Export data as an excel workbook with multiple sheets:
 export_to_excel <- function(data_frames, file_path) {
@@ -24,16 +27,15 @@ export_to_excel <- function(data_frames, file_path) {
   saveWorkbook(workbook, file_path, overwrite = TRUE)
 }
 
-
 #get data!
 #-----------------------------------------------------------------------------------------
 # import geography lookup to get PUAs: 
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
 setwd(path) 
 
 #Import flags and geography lookups for 1946 to 1973 
 #bring in flagging data
-path <- paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+path <- paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
 setwd(path)
 
 flags_1971 <- read.xlsx("2024-07-22_GB_Lookups.xlsx", sheet = "lad_71")
@@ -47,7 +49,7 @@ flags_1981 <- read.xlsx("2024-07-22_GB_Lookups.xlsx", sheet = "cty_81")
 # Get today's date in the format "YYYY-MM-DD"
 today <- format(Sys.Date(), "%Y-%m-%d")
 
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
 setwd(path) 
 
 # Construct the file name dynamically
@@ -64,7 +66,7 @@ gross_public_building <- read.xlsx(file_name, sheet = "public built")
 total_demolished <- read.xlsx(file_name, sheet = "total demolished")
 
 #get household proportion data for each decade
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
 setwd(path) 
 
 district_proportions_of_counties <- read.xlsx("2024-07-30_District_cty_households_and_share_of_county_calcs.xlsx", sheet = "share_calcs")
@@ -72,13 +74,13 @@ colnames(district_proportions_of_counties)[6] <- "cty_81"
 
 ###process to get stocks data 
 ###---------------------------------------------------------------------------------------
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
 setwd(path) 
 
 county_building_source <- paste0(today, "population_stock_housebuilding_46_73_1981geographies.xlsx")
-county_stocks_source <-  paste0(today, "population_stock_housebuilding_1974_2022_1981geographies.xlsx")
+county_stocks_source <-  paste0(today, "population_stock_housebuilding_1974_2023_1981geographies.xlsx")
 
-starting_point <- read_excel(county_stocks_source, sheet="net_stock_74_22", range = cell_cols("A:B"))
+starting_point <- read_excel(county_stocks_source, sheet="net_stock_74_23", range = cell_cols("A:B"))
 ongoing_building <-  read_excel(county_building_source, sheet="built_minus_demos_cty_1981", range = cell_cols("A:AC")) 
 gross_46_56 <- read_excel(county_building_source, sheet="gross_all_building_cty_1981", range = cell_cols("A:L")) 
 
@@ -98,7 +100,7 @@ adj_factor_70s <- (((our_stock_mar_71-adj_holmans_stock_mar_71)/our_stock_mar_71
 
 #save this value so I can use it to adjust the post 74 stock figures 
 # Generate file path for RDS file
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 rds_file_name <- paste0(today, "stock_70s_adj_factor", ".rds")
 rds_file_path <- file.path(dir_path_geog, rds_file_name)
 
@@ -332,7 +334,7 @@ tidy_district_stocks_45_73 <- district_stocks %>% select(equiv_1971_cd, dec1945,
 #long story - chat to James and Maurice about how and why we use these numbers! 
 #Import flags and geography lookups for 1946 to 1973 
 #bring in flagging data
-path <- paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+path <- paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
 setwd(path)
 
 crawley_pop_fix <- read.xlsx("Crawley_population_fixer.xlsx") 
@@ -651,7 +653,7 @@ HA_housebuilding_rate_cty <- HA_housebuilding_rate_cty[, c(1, grep("GR", colname
 # Generate file path for Excel workbook with date 01--------------------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "FINAL_45_73_lad71_data_output", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
@@ -669,7 +671,7 @@ export_to_excel(df_list_geog, file_path_geog)
 # Generate file path for Excel workbook with date 01--------------------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "FINAL_45_73_summarised_data_output", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames

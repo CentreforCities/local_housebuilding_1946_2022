@@ -31,7 +31,7 @@ dirname <- sub("^(([^/]+/){2}[^/]+).*", "\\1", dirname("~"))
 path <- paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Affordable Housing Tables/", collapse = NULL)
 setwd(path) 
 
-affordable_raw <- read.csv("AHS_199192_to_202223_open_data.csv") 
+affordable_raw <- read.csv("AHS_199192_to_202324_open_data.csv") 
 
 #make it only new builds and completions
 affordable_new_builds <- affordable_raw[affordable_raw$Type == "NB", ] 
@@ -47,12 +47,14 @@ affordable_LAany <- affordable_new_builds[affordable_new_builds$LT1000 %in% c("L
 affordable_S106_nogrant <- affordable_new_builds[affordable_new_builds$LT1000 == "s106 nil grant",]
 affordable_S106_partgrant <- affordable_new_builds[affordable_new_builds$LT1000 == "s106 part grant",]
 affordable_s106_any <- affordable_new_builds[affordable_new_builds$LT1000 %in% c("s106 nil grant", "s106 part grant"), ]
+affordable_grant <- affordable_new_builds[affordable_new_builds$LT1000 %in% c("Private Registered Provider HE/GLA funded", "Local Authority HE/GLA funded", "HE Funded"), ]
 excluded_values <- c("Private Registered Provider HE/GLA funded", 
                      "Private Registered Provider other funding", 
                      "Local Authority HE/GLA funded", 
                      "Local Authority other funding", 
                      "s106 nil grant", 
-                     "s106 part grant")
+                     "s106 part grant", 
+                     "HE Funded")
 affordable_other <- affordable_new_builds[!affordable_new_builds$LT1000 %in% excluded_values, ]
  
 #select different types of affordable housing
@@ -98,13 +100,13 @@ geog_lad_lookup <- read.xlsx("2024-06_all_LAs_into_LA23_into_CfC_geogs.xlsx", sh
 geog_lad_lookup <- geog_lad_lookup[, c(1, 4)]
 
 geog_lad_lookup <- geog_lad_lookup %>%
-  rename(LA.code.202223 = `LA.Code.(original)`) 
+  rename(LA.code.202324 = `LA.Code.(original)`) 
 
 #join flags to all the dataframes
 # Define a function to join flag data
 join_geogs <- function(df) {
   df %>%
-    left_join(geog_lad_lookup, by = "LA.code.202223")
+    left_join(geog_lad_lookup, by = "LA.code.202324")
 }
 
 # Apply the function to each summarized dataframe
@@ -118,6 +120,7 @@ affordable_LAany <- join_geogs(affordable_LAany)
 affordable_S106_nogrant <- join_geogs(affordable_S106_nogrant)
 affordable_S106_partgrant <- join_geogs(affordable_S106_partgrant)
 affordable_s106_any <- join_geogs(affordable_s106_any)
+affordable_grant <- join_geogs(affordable_grant)
 affordable_other <- join_geogs(affordable_other)
 social_rent <- join_geogs(social_rent)
 LDN_affordable_rent <- join_geogs(LDN_affordable_rent)
@@ -152,6 +155,7 @@ sum_affordable_LAany <- summarize_units_by_LA_and_year(affordable_LAany)
 sum_affordable_S106_nogrant <- summarize_units_by_LA_and_year(affordable_S106_nogrant)
 sum_affordable_S106_partgrant <- summarize_units_by_LA_and_year(affordable_S106_partgrant)
 sum_affordable_s106_any <- summarize_units_by_LA_and_year(affordable_s106_any)
+sum_affordable_grant <- summarize_units_by_LA_and_year(affordable_grant)
 sum_affordable_other_provider <- summarize_units_by_LA_and_year(affordable_other)
 
 sum_social_rent <- summarize_units_by_LA_and_year(social_rent)
@@ -212,6 +216,7 @@ sum_affordable_LAany <- rename_reorder_and_smooth(sum_affordable_LAany)
 sum_affordable_S106_nogrant <- rename_reorder_and_smooth(sum_affordable_S106_nogrant)
 sum_affordable_S106_partgrant <- rename_reorder_and_smooth(sum_affordable_S106_partgrant)
 sum_affordable_s106_any <- rename_reorder_and_smooth(sum_affordable_s106_any)
+sum_affordable_grant <- rename_reorder_and_smooth(sum_affordable_grant)
 sum_affordable_other_provider <- rename_reorder_and_smooth(sum_affordable_other_provider)
 
 sum_social_rent <- rename_reorder_and_smooth(sum_social_rent)
@@ -255,6 +260,7 @@ sum_affordable_LAany <- join_flags(sum_affordable_LAany)
 sum_affordable_S106_nogrant <- join_flags(sum_affordable_S106_nogrant)
 sum_affordable_S106_partgrant <- join_flags(sum_affordable_S106_partgrant)
 sum_affordable_s106_any <- join_flags(sum_affordable_s106_any)
+sum_affordable_grant <- join_flags(sum_affordable_grant)
 sum_affordable_other_provider <- join_flags(sum_affordable_other_provider)
 sum_social_rent <- join_flags(sum_social_rent)
 sum_LDN_affordable_rent <- join_flags(sum_LDN_affordable_rent)
@@ -277,11 +283,11 @@ dir_path_geog = paste0(dirname,"/Centre for Cities/Centre for Cities POC - Docum
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
-df_list_geog <- list(affordable_new_builds, sum_affordable_any, sum_affordable_HAany, sum_affordable_HAgrant, sum_affordable_HAother, sum_affordable_LAany, sum_affordable_LAgrant, sum_affordable_LAother, sum_affordable_other_provider, 
+df_list_geog <- list(affordable_new_builds, sum_affordable_any, sum_affordable_HAany, sum_affordable_HAgrant, sum_affordable_HAother, sum_affordable_LAany, sum_affordable_LAgrant, sum_affordable_LAother, sum_affordable_grant, sum_affordable_other_provider, 
                      sum_affordable_s106_any, sum_affordable_S106_nogrant, sum_affordable_S106_partgrant, sum_social_rent, sum_affordable_rent, sum_LDN_affordable_rent,
                      sum_intermediate_rent, sum_genuinely_affordable, sum_affordable_ownership, sum_shared_ownership, sum_other_affordable_tenure, sum_LA_HA_non_grant_social,
                      sum_questionably_affordable, sum_s106_social )
-names(df_list_geog) <- c("non_summarised", "any_tenure_any_provider", "HA", "HA_grantonly", "HA_other", "LA", "LA_grantonly", "LA_other", "other_provider",  
+names(df_list_geog) <- c("non_summarised", "any_tenure_any_provider", "HA", "HA_grantonly", "HA_other", "LA", "LA_grantonly", "LA_other", "grant_any", "other_provider",  
                          "s106", "s106_nogrant", "s106_partgrant", "social_rent", "affordable_rent", "LDN_affordable_rent", 
                          "intermediate_rent", "genuinely_affordable_rent", "affordable_ownership", "shared_ownership", "other_affordable_tenure", "LA_HA_non_grant_social",
                          "questionably_affordable", "s106_social")                             

@@ -6,8 +6,12 @@ library(ggplot2)
 library(tidyr)
 library(purrr)
 
+
+#set directory workaround
+dirname <- sub("^(([^/]+/){2}[^/]+).*", "\\1", dirname("~"))
+
 #geography lookup path----------------------------------------------------------
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
 setwd(path) 
 
 #Create a lookup without NT
@@ -34,7 +38,7 @@ print(duplicates)
 
 
 #bring in flagging data
-path <- paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+path <- paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
 setwd(path)
 
 lad71_cty81 <- read.xlsx("2024-07-22_GB_Lookups.xlsx", sheet = "lad_71")
@@ -47,7 +51,7 @@ new_towns <- list()
 
 
 #house price data source data path----------------------------------------------
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
 setwd(path) 
 
 #Import housing data for 1946-1973 
@@ -122,7 +126,7 @@ for (year in years) {
     # Create new column names for the totals
     col_name_completed_combined <- paste0(year, "_COMPLETED_PUBLIC")
     
-    # Copy COMPLETED_LA columns over to COMPLETED_COMBINED
+    # Copy COMPLETED_LA columns over to COMPLETED_PUBLIC
     filtered_data[[col_name_completed_combined]] <- rowSums(filtered_data[, completed_la_cols], na.rm = TRUE)
   }
   
@@ -330,28 +334,6 @@ master_demos <- master_demos %>%
 
 #Because the completions are cumulative (from 1st April 1945) up to 1965. Since 1966, they become annual.For now, let's do annual.
 #------------------------------------------------------------------------ 
-#percentage of national total housebuilding done in years 1947-1950, and 1952-53 - so we can apportion our missing years. 
-#1947    1948      1949      1950        1952    1953
-#18.89%   30.25%   25.33%    25.53%      42.75%   57.25%
-
-# total built
-# For 1954-1965, Loop through each column and update values
-year_columns <- paste0(1953:1965, "_COMPLETED_ALL")
-
-for (i in length(year_columns):2) {
-  mastersheet[[year_columns[i]]] <- mastersheet[[year_columns[i]]] - mastersheet[[year_columns[i - 1]]]
-}
-
-# Because we don't have data for 1947-1949 and 1952, we need to calculate the figures for 1950 and 1953 manually by proportion.
-# For 1951, 1951 ANNUAL = 1951-1950
-mastersheet[["1953_COMPLETED_ALL"]] <- (mastersheet[["1953_COMPLETED_ALL"]] - mastersheet[["1951_COMPLETED_ALL"]])*0.5725
-mastersheet[["1952_COMPLETED_ALL"]] <- mastersheet[["1953_COMPLETED_ALL"]] * (0.4275/0.5725)
-mastersheet[["1951_COMPLETED_ALL"]] <- mastersheet[["1951_COMPLETED_ALL"]] - mastersheet[["1950_COMPLETED_ALL"]]
-mastersheet[["1950_COMPLETED_ALL"]] <- (mastersheet[["1950_COMPLETED_ALL"]] - mastersheet[["1946_COMPLETED_ALL"]])*0.2553
-mastersheet[["1949_COMPLETED_ALL"]] <- mastersheet[["1950_COMPLETED_ALL"]] * (0.2533/0.2553)
-mastersheet[["1948_COMPLETED_ALL"]] <- mastersheet[["1950_COMPLETED_ALL"]] * (0.3025/0.2553)
-mastersheet[["1947_COMPLETED_ALL"]] <- mastersheet[["1950_COMPLETED_ALL"]] * (0.1889/0.2553)
-
 
 # Private built
 #percentage of national private housebuilding done in years 1947-1950, and 1952-53 - so we can apportion our missing years. 
@@ -411,20 +393,6 @@ mastersheet[["1946_COMPLETED_PRIVATE"]] <- mastersheet[["1946_COMPLETED_PRIVATE"
 #take the number off 1955 to kill the spike 
 mastersheet[["1955_COMPLETED_PRIVATE"]] <- mastersheet[["1955_COMPLETED_PRIVATE"]] - (mastersheet[["to_apportion"]])
 
-#we also need to adjust our 'completed all' totals so they also take into account the pre-apportioned private  
-mastersheet[["1954_COMPLETED_ALL"]] <- mastersheet[["1954_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.011)
-mastersheet[["1953_COMPLETED_ALL"]] <- mastersheet[["1953_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.032)
-mastersheet[["1952_COMPLETED_ALL"]] <- mastersheet[["1952_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.017)
-mastersheet[["1951_COMPLETED_ALL"]] <- mastersheet[["1951_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.041)
-mastersheet[["1950_COMPLETED_ALL"]] <- mastersheet[["1950_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.153)
-mastersheet[["1949_COMPLETED_ALL"]] <- mastersheet[["1949_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.144)
-mastersheet[["1948_COMPLETED_ALL"]] <- mastersheet[["1948_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.183)
-mastersheet[["1947_COMPLETED_ALL"]] <- mastersheet[["1947_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.233)
-mastersheet[["1946_COMPLETED_ALL"]] <- mastersheet[["1946_COMPLETED_ALL"]] + (mastersheet[["to_apportion"]] * 0.186) 
-
-#take the number off 1955 to kill the spike 
-mastersheet[["1955_COMPLETED_ALL"]] <- mastersheet[["1955_COMPLETED_ALL"]] - (mastersheet[["to_apportion"]])
-
 
 # LA built
 #percentage of national local housebuilding done in years 1947-1950, and 1952-53 - so we can apportion our missing years. 
@@ -471,12 +439,35 @@ for (i in length(year_columns):2) {
 
 # Because we don't have data for 1947-1949 and 1952, we need to calculate the figures for 1950 and 1953 manually by proportion.
 mastersheet[["1953_COMPLETED_PUBLIC"]] <- (mastersheet[["1953_COMPLETED_PUBLIC"]] - mastersheet[["1951_COMPLETED_PUBLIC"]])*0.5524
-mastersheet[["1952_COMPLETED_PUBLIC"]] <- mastersheet[["1953_COMPLETED_PUBLIC"]] * (0.4576/0.5524)
+mastersheet[["1952_COMPLETED_PUBLIC"]] <- mastersheet[["1953_COMPLETED_PUBLIC"]] * (0.4476/0.5524)
 mastersheet[["1951_COMPLETED_PUBLIC"]] <- mastersheet[["1951_COMPLETED_PUBLIC"]] - mastersheet[["1950_COMPLETED_PUBLIC"]]
 mastersheet[["1950_COMPLETED_PUBLIC"]] <- (mastersheet[["1950_COMPLETED_PUBLIC"]] - mastersheet[["1946_COMPLETED_PUBLIC"]])*0.2645
 mastersheet[["1949_COMPLETED_PUBLIC"]] <- mastersheet[["1950_COMPLETED_PUBLIC"]] * (0.2651/0.2645)
 mastersheet[["1948_COMPLETED_PUBLIC"]] <- mastersheet[["1950_COMPLETED_PUBLIC"]] * (0.3128/0.2645)
 mastersheet[["1947_COMPLETED_PUBLIC"]] <- mastersheet[["1950_COMPLETED_PUBLIC"]] * (0.1576/0.2645) 
+
+
+#percentage of national total housebuilding done in years 1947-1950, and 1952-53 - so we can apportion our missing years. 
+# total built
+# For 1956-1965, Loop through each column and update values
+year_columns <- paste0(1955:1965, "_COMPLETED_ALL")
+
+for (i in length(year_columns):2) {
+  mastersheet[[year_columns[i]]] <- mastersheet[[year_columns[i]]] - mastersheet[[year_columns[i - 1]]]
+}
+
+# Create totals which are private and public summed, taking into account all of the above edits
+mastersheet[["1955_COMPLETED_ALL"]] <- mastersheet[["1955_COMPLETED_PUBLIC"]] + mastersheet[["1955_COMPLETED_PRIVATE"]]
+mastersheet[["1954_COMPLETED_ALL"]] <- mastersheet[["1954_COMPLETED_PUBLIC"]] + mastersheet[["1954_COMPLETED_PRIVATE"]]
+mastersheet[["1953_COMPLETED_ALL"]] <- mastersheet[["1953_COMPLETED_PUBLIC"]] + mastersheet[["1953_COMPLETED_PRIVATE"]]
+mastersheet[["1952_COMPLETED_ALL"]] <- mastersheet[["1952_COMPLETED_PUBLIC"]] + mastersheet[["1952_COMPLETED_PRIVATE"]]
+mastersheet[["1951_COMPLETED_ALL"]] <- mastersheet[["1951_COMPLETED_PUBLIC"]] + mastersheet[["1951_COMPLETED_PRIVATE"]]
+mastersheet[["1950_COMPLETED_ALL"]] <- mastersheet[["1950_COMPLETED_PUBLIC"]] + mastersheet[["1950_COMPLETED_PRIVATE"]]
+mastersheet[["1949_COMPLETED_ALL"]] <- mastersheet[["1949_COMPLETED_PUBLIC"]] + mastersheet[["1949_COMPLETED_PRIVATE"]]
+mastersheet[["1948_COMPLETED_ALL"]] <- mastersheet[["1948_COMPLETED_PUBLIC"]] + mastersheet[["1948_COMPLETED_PRIVATE"]]
+mastersheet[["1947_COMPLETED_ALL"]] <- mastersheet[["1947_COMPLETED_PUBLIC"]] + mastersheet[["1947_COMPLETED_PRIVATE"]]
+mastersheet[["1946_COMPLETED_ALL"]] <- mastersheet[["1946_COMPLETED_PUBLIC"]] + mastersheet[["1946_COMPLETED_PRIVATE"]]
+
 
 
 # Demolished
@@ -1306,7 +1297,7 @@ export_to_excel <- function(data_frames, file_path) {
 # Generate file path for Excel workbook with date ----------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "mastersheet_1946_1973", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
@@ -1320,7 +1311,7 @@ export_to_excel(df_list_geog, file_path_geog)
 # Generate file path for Excel workbook with date ----------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "built_and_population_1946_1973", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
@@ -1334,7 +1325,7 @@ export_to_excel(df_list_geog, file_path_geog)
 # Generate file path for Excel workbook with New Town date ----------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "new_town_1946_1973", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
@@ -1417,7 +1408,7 @@ export_to_excel(df_list_geog, file_path_geog)
 # Generate file path for Excel workbook with date 02--------------------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "population_stock_housebuilding_46_73_1981geographies", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames

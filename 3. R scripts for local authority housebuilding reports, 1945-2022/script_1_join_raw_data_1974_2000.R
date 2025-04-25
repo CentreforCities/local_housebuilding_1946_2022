@@ -6,8 +6,11 @@ library(ggplot2)
 library(tidyr)
 library(purrr)
 
+#set directory workaround
+dirname <- sub("^(([^/]+/){2}[^/]+).*", "\\1", dirname("~"))
+
 #house price data source data path
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housing Returns/Phase 2 - geography joined/", collapse = NULL)
 setwd(path) 
 
 #import basic geography lookup for 1974 to 2001  
@@ -259,7 +262,7 @@ completed_all <- mastersheet %>%
 
 #supplementary data before 2000-------------------------------------------------
 #path
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Supplementary data/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Supplementary data/", collapse = NULL)
 
 #import data
 # Define the path to your Excel file
@@ -314,7 +317,7 @@ for (i in seq_along(sheet_names)) {
 
 # Generate new datasets for 1981 to 1999
 #Merge them into one sheet
-path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Supplementary data/", collapse = NULL)
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Supplementary data/", collapse = NULL)
 
 lookup <- read.xlsx(paste0(path, "consecutivezeros.xlsx"), sheet = "lookup")%>%
   rename(Current.ONS.code = Area_2001)
@@ -950,7 +953,7 @@ export_to_excel <- function(data_frames, file_path) {
 # Generate file path for Excel workbook with date
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "built_and_population_1974_2000", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
@@ -965,7 +968,7 @@ export_to_excel(df_list_geog, file_path_geog)
 # Generate file path for Excel workbook with date
 date <- format(Sys.Date(), "%Y-%m-%d")
 file_name_geog <- paste0(date, "new_towns_1974_2000", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames

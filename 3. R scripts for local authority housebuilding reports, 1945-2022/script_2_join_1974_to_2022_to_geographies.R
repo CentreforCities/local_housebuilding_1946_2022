@@ -5,8 +5,10 @@ library(openxlsx)
 library(ggplot2)
 library(tidyr)
 library(purrr)
-library(zoo)
 
+
+#set directory workaround
+dirname <- sub("^(([^/]+/){2}[^/]+).*", "\\1", dirname("~"))
 
 ### Getting the data 
 #-----------------------------------------------------------------------------------------
@@ -14,7 +16,7 @@ library(zoo)
     today <- format(Sys.Date(), "%Y-%m-%d")
 
 ###bring in PUA, regions, etc. geography lookup for 2001 onwards 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Core Data/Lookups/PUA and Small Geographies/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Core Data/Lookups/PUA and Small Geographies/", collapse = NULL)
     setwd(path)
     
     geographies <- read.xlsx("2024-06_all_LAs_into_LA23_into_CfC_geogs.xlsx", sheet = "LA") 
@@ -29,7 +31,7 @@ library(zoo)
     colnames(geographies)[4] <- "LA.Code_2023"
 
     #bring in 1981 counties lookup for counties join later on 
-    path <- paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+    path <- paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
     setwd(path)
     
     lad_23_to_cty_81 <- read.xlsx("2024-07-22_GB_Lookups.xlsx", sheet = "lad_23")
@@ -37,14 +39,14 @@ library(zoo)
     lad_23_to_cty_81 <- lad_23_to_cty_81[, c("LA.Code_2023", "cty_81")]
     
     ###bring in Inner London lookup - for 1981 census stock calculations 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/", collapse = NULL)
     setwd(path) 
     
     inner_LDN_lookup <- read.xlsx("Inner_LDN_lookup.xlsx")
     colnames(inner_LDN_lookup)[1] <- "LA.Code" 
 
 ###get our 1974 - 2000 data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
     setwd(path) 
     
     # Construct the file name dynamically
@@ -80,26 +82,18 @@ library(zoo)
 
 ###get government statistics on housing stock and housebuilding from different tenures 
     #get 2001 - 2022 total stock data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housebuilding Tables/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Housebuilding Tables/", collapse = NULL)
     setwd(path) 
     
-    stock2001_2022 <- read.xlsx("LT_125.xlsx", sheet = "Table_125_(unrounded)")
+    stock2001_2023 <- read.xlsx("LT_125_2023.xlsx", sheet = "Table_125_(unrounded)")
     
-    new_colnames <- as.character(stock2001_2022[3, ])
-    colnames(stock2001_2022) <- new_colnames
-    stock2001_2022 <- stock2001_2022[-c(1:3), ]
+    new_colnames <- as.character(stock2001_2023[3, ])
+    colnames(stock2001_2023) <- new_colnames
+    stock2001_2023 <- stock2001_2023[-c(1:3), ]
     
-    stock2001_2022 <- stock2001_2022[, -c(1, 3)]
-    
-    #make new LA name column and move it to the right place
-    stock2001_2022$LA_name <- ifelse(!is.na(stock2001_2022[, 2]), stock2001_2022[, 2], stock2001_2022[, 3])
-    stock2001_2022 <- stock2001_2022[, c(1, ncol(stock2001_2022), 4:(ncol(stock2001_2022)-1))]
-    
-    colnames(stock2001_2022)[1] <- "LA.Code" 
-  
-    stock2001_2022 <- stock2001_2022 %>%
-      filter(!is.na(LA.Code))
-
+    stock2001_2023 <- stock2001_2023[, -c(1, 3)]
+    colnames(stock2001_2023)[1] <- "LA.Code" 
+    colnames(stock2001_2023)[2:ncol(stock2001_2023)] <- 2001:2023
    
     #----
     #get 2001-2022 building by tenure data 
@@ -377,60 +371,72 @@ for (i in 1:nrow(built2000_2022)) {
   }
 }
 
-  
+### get net additional dwellings 2012 onwards from Table 123.
+    #note: (already processed into 2023 geographies and calendar years by script called sort_NAD_data_2012_2023) 
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
+    setwd(path) 
+    
+    file_name <- paste0(today, "newbuild_NAD_lad_2023.xlsx")
+    
+    NAD2012_2023 <- read.xlsx(file_name, sheet = "newbuild_NAD")
+    colnames(NAD2012_2023)[1] <- "LA.Code_2023"
+    
 ###get public housebuilding data from 1991 Table 1011 
     #note = this is already summarised to 2023 LAs and financial year adjusted
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Affordable housebuilding/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Affordable housebuilding/", collapse = NULL)
     setwd(path) 
     
     #bring in the relevant tenure types and builder
     file_name <- paste0(today, "affordable_housing_summaries_lad_2023.xlsx")
     
-    all_affordable_built_1991_2022 <- read.xlsx(file_name, sheet = "any_tenure_any_provider")
-    colnames(all_affordable_built_1991_2022)[1] <- "LA.Code_2023"
+    all_affordable_built_1991_2023 <- read.xlsx(file_name, sheet = "any_tenure_any_provider")
+    colnames(all_affordable_built_1991_2023)[1] <- "LA.Code_2023"
     
-    social_built_1991_2022 <- read.xlsx(file_name, sheet = "social_rent")
-    colnames(social_built_1991_2022)[1] <- "LA.Code_2023"
+    social_built_1991_2023 <- read.xlsx(file_name, sheet = "social_rent")
+    colnames(social_built_1991_2023)[1] <- "LA.Code_2023"
     
-    LA_built_1991_2022 <- read.xlsx(file_name, sheet = "LA")
-    colnames(LA_built_1991_2022)[1] <- "LA.Code_2023"
+    S106_built_2000_2023 <- read.xlsx(file_name, sheet = "s106")
+    colnames(S106_built_2000_2023)[1] <- "LA.Code_2023"
     
-    HA_built_1991_2022 <- read.xlsx(file_name, sheet = "HA")
-    colnames(HA_built_1991_2022)[1] <- "LA.Code_2023" 
+    LA_built_1991_2023 <- read.xlsx(file_name, sheet = "LA")
+    colnames(LA_built_1991_2023)[1] <- "LA.Code_2023"
+    
+    HA_built_1991_2023 <- read.xlsx(file_name, sheet = "HA")
+    colnames(HA_built_1991_2023)[1] <- "LA.Code_2023" 
     
     #calculate a non-social, affordable housing category
-    affordable_not_social_1991_2022 <- all_affordable_built_1991_2022 %>% 
-      left_join(social_built_1991_2022, by = "LA.Code_2023") 
+    affordable_not_social_1991_2023 <- all_affordable_built_1991_2023 %>% 
+      left_join(social_built_1991_2023, by = "LA.Code_2023") 
     
     # Loop to calculate the difference for years 1991 to 2022
-    for (year in 1991:2022) {
+    for (year in 1991:2023) {
       col_x <- paste0(year, ".x")
       col_y <- paste0(year, ".y")
       new_col <- paste0("notsocial", year)
       
       # Calculate the difference and create a new column
-      affordable_not_social_1991_2022[[new_col]] <- 
-        affordable_not_social_1991_2022[[col_x]] - affordable_not_social_1991_2022[[col_y]]
+      affordable_not_social_1991_2023[[new_col]] <- 
+        affordable_not_social_1991_2023[[col_x]] - affordable_not_social_1991_2023[[col_y]]
     }
     
     # Remove columns with ".x" or ".y"
-    cols_to_remove <- grep("\\.x$|\\.y$", names(affordable_not_social_1991_2022), value = TRUE)
-    affordable_not_social_1991_2022 <- affordable_not_social_1991_2022[ , !(names(affordable_not_social_1991_2022) %in% cols_to_remove)]
+    cols_to_remove <- grep("\\.x$|\\.y$", names(affordable_not_social_1991_2023), value = TRUE)
+    affordable_not_social_1991_2023 <- affordable_not_social_1991_2023[ , !(names(affordable_not_social_1991_2023) %in% cols_to_remove)]
     
     # Rename columns to remove "notsocial" prefix
-    names(affordable_not_social_1991_2022) <- gsub("^notsocial", "", names(affordable_not_social_1991_2022))
+    names(affordable_not_social_1991_2023) <- gsub("^notsocial", "", names(affordable_not_social_1991_2023))
     
 ###get 1998 - 2022 population data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Population/", collapse = NULL)
+    #note - should update this to pull in population data for 2023 and subsequent years when the data becomes available
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Population/", collapse = NULL)
     setwd(path) 
     
     pop1992_2022 <- read.xlsx("2024-05-30_population.xlsx")  
     pop1992_2022 <- pop1992_2022 %>% select(1,2,4:34)
      
-
 ###get total dwelling stock data from Censuses
     #get 1981 dwelling stock data - and make the same adjustments as holmans
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1981/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1981/", collapse = NULL)
     setwd(path)  
     
     dwellingstock_1981 <- read.csv("1981 - Household spaces.csv")
@@ -467,7 +473,7 @@ for (i in 1:nrow(built2000_2022)) {
     dwellingstock_1981 <- dwellingstock_1981[, -c(2:5)]  
     
     #get 1991 dwelling stock data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1991/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1991/", collapse = NULL)
     setwd(path)  
     
     dwellingstock_1991 <- read.csv("1991 Households - occupied, empty, second homes etc.csv")
@@ -490,7 +496,7 @@ for (i in 1:nrow(built2000_2022)) {
     #----
 ###get stock by tenure data from Censuses 
     #get 1981 tenure stock data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1981/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1981/", collapse = NULL)
     setwd(path)  
     
     tenurestock_1981 <- read.csv("1981 Households - tenure type.csv")
@@ -508,7 +514,7 @@ for (i in 1:nrow(built2000_2022)) {
     colnames(HAstock1981)[3] <- "HA_stock" 
     
     #get 1991 tenure stock data 
-    path = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1991/", collapse = NULL)
+    path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Input/Census 1991/", collapse = NULL)
     setwd(path)  
     
     tenurestock_1991 <- read.csv("1991 Households - tenure type.csv")
@@ -659,23 +665,25 @@ for (i in 1:nrow(built2000_2022)) {
     publicbuilt74_00 <- publicbuilt74_00[, columns_to_keep] 
     
     ##join with all affordable from Table 1011 
-    publicbuilt74_22 <- publicbuilt74_00 %>% 
-      left_join(all_affordable_built_1991_2022, by = "LA.Code_2023")
+    publicbuilt74_23 <- publicbuilt74_00 %>% 
+      left_join(all_affordable_built_1991_2023, by = "LA.Code_2023")
     
     #remove years where we use T1011 instead of housebuilding data 
-    publicbuilt74_22 <- publicbuilt74_22 %>%
+    publicbuilt74_23 <- publicbuilt74_23 %>%
       select(-c(paste0(1991:2000, "_COMPLETED_PUBLIC"))) 
-
+    
+    #rename columns
+    names(publicbuilt74_23) <- gsub("_COMPLETED_PUBLIC$", "", names(publicbuilt74_23))
     
 ###add government data to geographies 
     #total dwelling stock 2001-2022
-    joined_stock2001_2022 <- geographies %>% 
-      left_join(stock2001_2022, by = "LA.Code")
+    joined_stock2001_2023 <- geographies %>% 
+      left_join(stock2001_2023, by = "LA.Code")
     
-    joined_stock2001_2022 <- joined_stock2001_2022 %>%
-      mutate(across(15:36, as.numeric))
+    joined_stock2001_2023 <- joined_stock2001_2023 %>%
+      mutate(across(15:37, as.numeric))
     
-    stock01_22_summarised <- joined_stock2001_2022 %>%
+    stock01_23_summarised <- joined_stock2001_2023 %>%
       group_by(LA.Code_2023) %>%
       summarize(across(where(is.numeric), sum, na.rm = TRUE)) 
     
@@ -761,9 +769,9 @@ for (i in 1:nrow(built2000_2022)) {
     #netbuilt works from 'completed all', so I need to subtract housebuilding public and then re-add T1011 public 
     netbuilt74_00_summarised <- netbuilt74_00_summarised %>% 
       left_join(publicbuilt74_00, by = "LA.Code_2023") 
-    
+        
     netbuilt74_00_summarised <- netbuilt74_00_summarised %>% 
-      left_join(all_affordable_built_1991_2022, by = "LA.Code_2023") 
+      left_join(all_affordable_built_1991_2023, by = "LA.Code_2023") 
     
     # Loop through the years 1991 to 2000
     for (year in 1991:2000) {
@@ -875,19 +883,19 @@ for (i in 1:nrow(built2000_2022)) {
 ##creating dataframe with all dwelling stock data in it 
   #--------------------------------------------------------------------------------------------
   #add geographies to dwelling stock 2001-2022 and summarise by 2023 LA code 
-  joinedstock_1974_2022 <- joinedstock_74building %>% 
-   left_join(stock01_22_summarised, by = "LA.Code_2023") 
+  joinedstock_1974_2023 <- joinedstock_74building %>% 
+   left_join(stock01_23_summarised, by = "LA.Code_2023") 
   
   #calculate 1991-2000 average
-  joinedstock_1974_2022$average91_00 <- (joinedstock_1974_2022$`2000_total` - joinedstock_1974_2022$`1991_total`) /10 
+  joinedstock_1974_2023$average91_00 <- (joinedstock_1974_2023$`2000_total` - joinedstock_1974_2023$`1991_total`) /10 
   #create projected 2001 on basis of this average 
-  joinedstock_1974_2022$`2001_est` <- joinedstock_1974_2022$`2000_total` + joinedstock_1974_2022$`average91_00`
+  joinedstock_1974_2023$`2001_est` <- joinedstock_1974_2023$`2000_total` + joinedstock_1974_2023$`average91_00`
 
   #work out difference between 2001est and 2001 census, and divide by 10 to get adjustment 
-  joinedstock_1974_2022$adj00_01 <- (joinedstock_1974_2022$`2001` - joinedstock_1974_2022$`2001_est`)/10
+  joinedstock_1974_2023$adj00_01 <- (joinedstock_1974_2023$`2001` - joinedstock_1974_2023$`2001_est`)/10
   
   #add adjustment to yearly totals to get adjusted totals
-  joinedstock_1974_2022 <- joinedstock_1974_2022 %>%
+  joinedstock_1974_2023 <- joinedstock_1974_2023 %>%
    mutate(`1992_total` = `1992_total` + adj00_01*1,
          `1993_total` = `1993_total` + adj00_01*2,
          `1994_total` = `1994_total` + adj00_01*3,
@@ -899,24 +907,23 @@ for (i in 1:nrow(built2000_2022)) {
          `2000_total` = `2000_total` + adj00_01*9,)
 
   #remove Census data from 1981 and 1991 and adjustment for cleanliness 
-  joinedstock_1974_2022 <- subset(joinedstock_1974_2022, select = -`average91_00`)
-  joinedstock_1974_2022 <- subset(joinedstock_1974_2022, select = -`2001_est`)
-  joinedstock_1974_2022 <- subset(joinedstock_1974_2022, select = -`adj00_01`)
-  joinedstock_1974_2022 <- subset(joinedstock_1974_2022, select = -`LA_name`)
+  joinedstock_1974_2023 <- subset(joinedstock_1974_2023, select = -`average91_00`)
+  joinedstock_1974_2023 <- subset(joinedstock_1974_2023, select = -`2001_est`)
+  joinedstock_1974_2023 <- subset(joinedstock_1974_2023, select = -`adj00_01`)
 
   #name columns year only 
   start_year <- 1973
-  num_years <- ncol(joinedstock_1974_2022) - 1
+  num_years <- ncol(joinedstock_1974_2023) - 1
   year_sequence <- start_year:(start_year + num_years - 1)
 
-  # Assign new column names starting from the third column
-  colnames(joinedstock_1974_2022)[2:ncol(joinedstock_1974_2022)] <- as.character(year_sequence) 
+  # Assign new column names starting from the second column
+  colnames(joinedstock_1974_2023)[2:ncol(joinedstock_1974_2023)] <- as.character(year_sequence) 
 
 
 
 ##create total built, by LA, HA, and private estimates 1974-2022 - making complete year estimates (re-jigging financial year reporting)
 #-----------------------------------------------------------------------------------------------------
-  #total built - housebuilding all joined to T253
+  #total built - first step - our housebuilding data joined to T253 total built
   built74_22 <- built74_00_summarised %>% 
     left_join(built00_22_summarised, by = "LA.Code_2023")  
 
@@ -947,10 +954,7 @@ for (i in 1:nrow(built2000_2022)) {
   built74_22 <- built74_22[, !columns_to_delete]
   colnames(built74_22)[-1] <- as.character(start_year:end_year)
   
-  ### start work from here tomorrow!! need to produce public adjusted totals and output public / LA / HA in sensible way. All above this makes sense I think. 
-  #watch out for financial years - don't need to make them like I have below. 
-  
-  #built works from 'completed all', so I need to subtract housebuilding public and then re-add T1011 public 
+  #built works from 'completed all', so I need to subtract housebuilding public and then re-add T1011 public for total which equals public + private
   built74_22 <- built74_22 %>% 
     left_join(publicbuilt74_00, by = "LA.Code_2023")
   
@@ -958,7 +962,7 @@ for (i in 1:nrow(built2000_2022)) {
     left_join(publicbuilt00_22, by = "LA.Code_2023")
   
   built74_22 <- built74_22 %>% 
-    left_join(all_affordable_built_1991_2022, by = "LA.Code_2023") 
+    left_join(all_affordable_built_1991_2023, by = "LA.Code_2023") 
   
   #remove housebuilding public 1991-2000 and T253 public 2001-2022, add T1011 back again 
   for (year in 1991:2022) {
@@ -980,67 +984,103 @@ for (i in 1:nrow(built2000_2022)) {
   built74_22 <- built74_22[, selected_columns]
   names(built74_22) <- gsub("_pubadj$", "", names(built74_22))
 
+  #insert T123 new build net additional dwellings and replace total built from 2012 to 2023 
+  built74_23 <- built74_22 %>% 
+    left_join(NAD2012_2023, by = "LA.Code_2023")
+  
+  built74_23 <- built74_23 %>% select(-contains(".x"))
+  colnames(built74_23) <- gsub("\\.y$", "", colnames(built74_23))
   
   ##LA built 
-  LAbuilt74_22 <- LAbuilt74_00_summarised %>% 
-    left_join(LA_built_1991_2022, by = "LA.Code_2023")  
+  LAbuilt74_23 <- LAbuilt74_00_summarised %>% 
+    left_join(LA_built_1991_2023, by = "LA.Code_2023")  
   
   #remove 1991-2000 from housebuilding data and keep only T1011 data
-  LAbuilt74_22 <- LAbuilt74_22[, -19:-28]
+  LAbuilt74_23 <- LAbuilt74_23[, -19:-28]
   
-  names(LAbuilt74_22) <- gsub("_COMPLETED_LOCAL$", "", names(LAbuilt74_22))
+  names(LAbuilt74_23) <- gsub("_COMPLETED_LOCAL$", "", names(LAbuilt74_23))
   
   
   ##HA built 
-  HAbuilt74_22 <- HAbuilt74_00_summarised %>% 
-    left_join(HA_built_1991_2022, by = "LA.Code_2023")  
+  HAbuilt74_23 <- HAbuilt74_00_summarised %>% 
+    left_join(HA_built_1991_2023, by = "LA.Code_2023")  
   
   #remove 1991-2000 from housebuilding data and keep only T1011 data
-  HAbuilt74_22 <- HAbuilt74_22[, -19:-28]
+  HAbuilt74_23 <- HAbuilt74_23[, -19:-28]
   
-  names(HAbuilt74_22) <- gsub("_COMPLETED_HA$", "", names(HAbuilt74_22))
+  names(HAbuilt74_23) <- gsub("_COMPLETED_HA$", "", names(HAbuilt74_23))
   
   
-  ## private built
-  privatebuilt74_22 <- privatebuilt74_00_summarised %>% 
-    left_join(privatebuilt00_22_summarised, by = "LA.Code_2023")  
+  ## market built (total built minus T1011 all)
+  marketbuilt74_23 <- built74_23 %>% 
+    left_join(publicbuilt74_23, by = "LA.Code_2023")  
   
-  colnames(privatebuilt74_22)[-1] <- as.character(start_year:end_year)
-  
-  # Loop to create total columns
-  for (year in years_to_fill) {
-    prev_year <- year - 1
-    privatebuilt74_22 <- privatebuilt74_22 %>%
-      mutate(
-        !!paste0(year, "_total") := get(paste0(prev_year)) * 0.25 + get(paste0(year)) * 0.75
-      )
+  for (year in 1974:2023) {
+    x_col <- paste0(year, ".x")  # Column name with .x
+    y_col <- paste0(year, ".y")  # Column name with .y
+    new_col <- paste0(year, "_market")  # New column name
+    
+    if (x_col %in% colnames(marketbuilt74_23) & y_col %in% colnames(marketbuilt74_23)) {
+      marketbuilt74_23[[new_col]] <- marketbuilt74_23[[x_col]] - marketbuilt74_23[[y_col]]
+    }
   }
   
-  columns_to_delete <- colnames(privatebuilt74_22) %in% c(
-                                                     "2001", "2002", "2003", "2004", "2005",
-                                                     "2006", "2007", "2008", "2009", "2010",
-                                                     "2011", "2012", "2013", "2014", "2015",
-                                                     "2016", "2017", "2018", "2019", "2020",
-                                                     "2021", "2022")
+  # Remove the original .x and .y columns 
+  marketbuilt74_23 <- marketbuilt74_23 %>% select(-matches("\\.x$|\\.y$"))
   
-  privatebuilt74_22 <- privatebuilt74_22[, !columns_to_delete]
-  colnames(privatebuilt74_22)[-1] <- as.character(start_year:end_year)
+  # Identify all _market columns and reorder
+  market_cols <- grep("_market$", colnames(marketbuilt74_23), value = TRUE)
+  other_cols <- setdiff(colnames(marketbuilt74_23), market_cols)
+  new_order <- c(other_cols[1], market_cols, other_cols[-1])  
+  marketbuilt74_23 <- marketbuilt74_23[, new_order]
   
-  ## public built - just edit column names from earlier made dataframe
-  names(publicbuilt74_22) <- gsub("_COMPLETED_PUBLIC$", "", names(publicbuilt74_22))
+  # Rename market columns to remove "_market"
+  colnames(marketbuilt74_23)[colnames(marketbuilt74_23) %in% market_cols] <- gsub("_market$", "", market_cols)
+  
+
+  ## private delivered: market + s106 (called delivered rather than built to distinguish from previous notation)
+  privatedelivered74_23 <- marketbuilt74_23 %>% 
+    left_join(S106_built_2000_2023, by = "LA.Code_2023")
+  
+  for (year in 1974:2023) {
+    x_col <- paste0(year, ".x")  # Column name with .x
+    y_col <- paste0(year, ".y")  # Column name with .y
+    new_col <- paste0(year, "_privatedelivered")  # New column name
+    
+    if (x_col %in% colnames(privatedelivered74_23) & y_col %in% colnames(privatedelivered74_23)) {
+      privatedelivered74_23[[new_col]] <- privatedelivered74_23[[x_col]] + privatedelivered74_23[[y_col]]
+    }
+  }
+  
+  privatedelivered74_23 <- privatedelivered74_23 %>%
+    select(-matches("\\.x$"), -matches("^\\d{4}\\.y$")) %>% 
+    rename_with(~ gsub("_privatedelivered$", "", .x), .cols = everything())%>%
+    select(-matches("\\.y$"), everything(), matches("\\.y$")) %>%
+    rename_with(~ gsub("\\.y$", "", .x), .cols = matches("\\.y$"))
+  
 
   #tidy up dataframes: 
-  columns_to_keep <- c(1, grep("^\\d{4}$", names(publicbuilt74_22)))
-  publicbuilt74_22 <- publicbuilt74_22[, columns_to_keep]
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(publicbuilt74_23)))
+  publicbuilt74_23 <- publicbuilt74_23[, columns_to_keep]
   
-  columns_to_keep <- c(1, grep("^\\d{4}$", names(HAbuilt74_22)))
-  HAbuilt74_22 <- HAbuilt74_22[, columns_to_keep]
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(marketbuilt74_23)))
+  marketbuilt74_23 <- marketbuilt74_23[, columns_to_keep]
   
-  columns_to_keep <- c(1, grep("^\\d{4}$", names(LAbuilt74_22)))
-  LAbuilt74_22 <- LAbuilt74_22[, columns_to_keep]
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(built74_23)))
+  built74_23 <- built74_23[, columns_to_keep]
   
-  columns_to_keep <- c(1, grep("^\\d{4}$", names(social_built_1991_2022)))
-  social_built_1991_2022 <- social_built_1991_2022[, columns_to_keep]
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(privatedelivered74_23)))
+  privatedelivered74_23 <- privatedelivered74_23[, columns_to_keep]
+  
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(HAbuilt74_23)))
+  HAbuilt74_23 <- HAbuilt74_23[, columns_to_keep]
+  
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(LAbuilt74_23)))
+  LAbuilt74_23 <- LAbuilt74_23[, columns_to_keep]
+  
+  columns_to_keep <- c(1, grep("^\\d{4}$", names(social_built_1991_2023)))
+  social_built_1991_2023 <- social_built_1991_2023[, columns_to_keep]
+  
   
 ### EXPORT net completed & population stats to excel
 # Export data as an excel workbook with multiple sheets:
@@ -1062,15 +1102,15 @@ export_to_excel <- function(data_frames, file_path) {
 
 # Generate file path for Excel workbook with date
 date <- format(Sys.Date(), "%Y-%m-%d")
-file_name_geog <- paste0(date, "population_stock_housebuilding_1974_2022_2023geographies", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+file_name_geog <- paste0(date, "population_stock_housebuilding_1974_2023_2023geographies", ".xlsx")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
-df_list_geog <- list(population_summarised, joinedstock_1974_2022, built74_22, LAbuilt74_22, HAbuilt74_22, privatebuilt74_22, publicbuilt74_22, demolished74_79_summarised, 
-                     affordable_not_social_1991_2022, social_built_1991_2022)
-names(df_list_geog) <- c("population_74_22", "net_stock_74_22", "gross_all_74_22", "gross_LA_74_22", "gross_HA_74_22", "gross_private_74_22", "gross_public_74_22", "total_demolished_74_79", 
-                         "affordable_not_social_91_22", "social_91_22")                         
+df_list_geog <- list(population_summarised, joinedstock_1974_2023, built74_23, LAbuilt74_23, HAbuilt74_23, marketbuilt74_23, privatedelivered74_23, publicbuilt74_23, S106_built_2000_2023,
+                     demolished74_79_summarised, affordable_not_social_1991_2023, social_built_1991_2023)
+names(df_list_geog) <- c("population_74_22", "net_stock_74_23", "gross_all_74_23", "gross_LA_74_23", "gross_HA_74_23", "gross_market_74_23", "gross_private_delivered_74_23", "gross_public_74_23", "S106_00_23",
+                         "total_demolished_74_79", "affordable_not_social_91_23", "social_91_23")                         
 
 # Export data frames to Excel
 export_to_excel(df_list_geog, file_path_geog)
@@ -1086,81 +1126,94 @@ pop_cty81 <- population_summarised %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-joinedstock_1974_2022 <- joinedstock_1974_2022 %>% 
+joinedstock_1974_2023 <- joinedstock_1974_2023 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-net_stock_cty81 <- joinedstock_1974_2022 %>%
+net_stock_cty81 <- joinedstock_1974_2023 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-built74_22 <- built74_22 %>% 
+built74_23 <- built74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-built_cty81 <- built74_22 %>%
+built_cty81 <- built74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE)) 
 
 
-LAbuilt74_22 <- LAbuilt74_22 %>% 
+LAbuilt74_23 <- LAbuilt74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-LAbuilt_cty81 <- LAbuilt74_22 %>%
+LAbuilt_cty81 <- LAbuilt74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-HAbuilt74_22 <- HAbuilt74_22 %>% 
+HAbuilt74_23 <- HAbuilt74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-HAbuilt_cty81 <- HAbuilt74_22 %>%
+HAbuilt_cty81 <- HAbuilt74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-privatebuilt74_22 <- privatebuilt74_22 %>% 
+privatedelivered74_23 <- privatedelivered74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-privatebuilt_cty81 <- privatebuilt74_22 %>%
+privatedelivered_cty81 <- privatedelivered74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-publicbuilt74_22 <- publicbuilt74_22 %>% 
+marketbuilt74_23 <- marketbuilt74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-publicbuilt_cty81 <- publicbuilt74_22 %>%
+marketbuilt_cty81 <- marketbuilt74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-affordable_not_social_1991_2022 <- affordable_not_social_1991_2022 %>% 
+publicbuilt74_23 <- publicbuilt74_23 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-affordable_not_social_cty81 <- affordable_not_social_1991_2022 %>%
+publicbuilt_cty81 <- publicbuilt74_23 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
-social_built_1991_2022 <- social_built_1991_2022 %>% 
+S106built_cty81 <- S106_built_2000_2023 %>%
+  group_by(cty_81) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE))  
+
+
+affordable_not_social_1991_2023 <- affordable_not_social_1991_2023 %>% 
   left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
 
-social_built_cty81 <- social_built_1991_2022 %>%
+affordable_not_social_cty81 <- affordable_not_social_1991_2023 %>%
+  group_by(cty_81) %>%
+  summarize(across(where(is.numeric), sum, na.rm = TRUE))  
+
+
+social_built_1991_2023 <- social_built_1991_2023 %>% 
+  left_join(lad_23_to_cty_81, by = "LA.Code_2023") 
+
+social_built_cty81 <- social_built_1991_2023 %>%
   group_by(cty_81) %>%
   summarize(across(where(is.numeric), sum, na.rm = TRUE))  
 
 
 # Generate file path for Excel workbook with date-------------------------------
 date <- format(Sys.Date(), "%Y-%m-%d")
-file_name_geog <- paste0(date, "population_stock_housebuilding_1974_2022_1981geographies", ".xlsx")
-dir_path_geog = paste0(dirname("~"),"/Centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
+file_name_geog <- paste0(date, "population_stock_housebuilding_1974_2023_1981geographies", ".xlsx")
+dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/")
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
-df_list_geog <- list(pop_cty81, net_stock_cty81, built_cty81, LAbuilt_cty81, HAbuilt_cty81, privatebuilt_cty81, publicbuilt_cty81, 
+df_list_geog <- list(pop_cty81, net_stock_cty81, built_cty81, LAbuilt_cty81, HAbuilt_cty81, marketbuilt_cty81, privatedelivered_cty81, publicbuilt_cty81, S106built_cty81,
                      affordable_not_social_cty81, social_built_cty81)
-names(df_list_geog) <- c("population_74_22", "net_stock_74_22", "gross_all_74_22", "gross_LA_74_22", "gross_HA_74_22", "gross_private_74_22", "gross_public_74_22", 
-                         "affordable_not_social_91_22", "social_built_91_22")                         
+names(df_list_geog) <- c("population_74_22", "net_stock_74_23", "gross_all_74_23", "gross_LA_74_23", "gross_HA_74_23", "gross_market_74_23", "gross_private_delivered_74_23", "gross_public_74_23", "gross_S106_00_23",
+                         "affordable_not_social_91_23", "social_built_91_23")                         
 
 # Export data frames to Excel
 export_to_excel(df_list_geog, file_path_geog)
