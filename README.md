@@ -12,6 +12,8 @@ Social housing and the public sector: https://www.centreforcities.org/publicatio
 
 New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
+(note: workbooks and scripts which match exactly to those uses for the above reports are now in the Archive folder, following minor improvements made in April 2025)
+
  Data available is as follows:
  
 - Folder 1: Output workbooks - Containing total, private/market, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2023. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
