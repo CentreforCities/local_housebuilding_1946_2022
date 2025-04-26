@@ -1,4 +1,4 @@
-# local_housebuilding_1946_2022
+# local_housebuilding_1946_2023
 Information about local authority housebuilding data in England from 1946-2023, digitised and compiled in 2024 by Centre for Cities. 
 
 *Note - April 2025 updates add an extra year and make minor changes to housebuilding data workbooks and relevant scripts, following a decision to use MHCLG Table 123 as the source of total new build housebuilding from 2012-2023.This results in a small uplift to private and total housebuilding, mostly in urban areas, for the years affected. All historical data remains unchanged as a result of this update. See diagram in Folder 1 for clarity on data sources.*
