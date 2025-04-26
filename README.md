@@ -1,7 +1,7 @@
 # local_housebuilding_1946_2022
 Information about local authority housebuilding data in England from 1946-2023, digitised and compiled in 2024 by Centre for Cities. 
 
-*Note - minor updates were released in April 2025 to R scripts and housebuilding data workbooks, following a decision to use MHCLG Table 123 as the preferred source of total new build housebuilding from 2012-2023. All historical data remains unchanged as a result of this update*
+*Note - April 2025 updates add an extra year and make minor changes to housebuilding data workbooks and relevant scripts, following a decision to use MHCLG Table 123 as the source of total new build housebuilding from 2012-2023.This results in a small uplift to private and total housebuilding, mostly in urban areas, for the years affected. All historical data remains unchanged as a result of this update. See diagram in folder XX*
 
 ## Description 
 This repository describes the data Centre for Cities can make available following data work carried out for the 2024 Restarting Housebuilding series: 
@@ -14,13 +14,13 @@ New towns and land value capture: https://www.centreforcities.org/publication/re
 
  Data available is as follows:
  
-- Folder 1: Output workbooks - Containing total, private, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2022. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
+- Folder 1: Output workbooks - Containing total, private/market, public, local authority, housing association annual housebuilding totals, as well as stock estimates and population 1946-2023. The data is available at local authority district level (separate geographies pre- and post-1974), 1981 counties, and England totals. Most users will want to start here.
 
 - Folder 2:'raw' digitised annual housebuilding reports, which provide private and public housebuilding totals at local authority level from 1946-2000. Public housebuilding data can be separated into local authority and housing associations after 1962. 
 
 - Folder 3: R scripts used to knit these annual reports together, and combine them with other datasets to produce stock estimates and continuous datasets to the present-day in the output workbooks.
 
-- Folder 4: Data on housebuilding, public and private, by new town development corporations between 1950 and 1992 is also available. 
+- Folder 4: Data on housebuilding, public and private, by new town development corporations between 1950 and 1992.
 
 - Folder 5: Geopackages containing the maps for novel geographies used in this data series, for pre-1974 local authorities and 1981 counties. They are built using original maps from the ONS Open Geography Portal and released under the Open Government Licence v3.0.
 
@@ -37,10 +37,7 @@ https://lse-atom.arkivum.net/uklse-dl1eh01010
 
 We digitised this data using a combination of OCR and manual data entry and checking. The digitised data is now free of any noticeable errors. Where there were obvious errors in the source data, this was corrected as best made sense given contextual data. Small errors may have slipped through the checking process, so digitised and scanned data may not 100% match. 
 
-We have compiled this data into useable workbooks and attached it to publicly available data on housebuilding, housing stock and population so that the data runs up to the present day.   
-
-From 2010 onwards, known issues with official government tables on housebuilding by tenure mean the results are slight underestimates, particularly for private housebuilding. This was chosen to ensure consistency across the long-run of the dataset for the Restarting Housebuilding reports, as it does not affect the analysis of any of the three papers. We are currently considering whether to amend this or provide an alternative metric, and in the meantime, users should treat the post-2010 data with caution and be conscious they are potentially subject to change. Analysis which focuses solely on the past fifteen years or so would probably be wiser to use an alternative source - if you would like advice on which data to consult then please get in touch.
-
+We have compiled this data into useable workbooks and attached it to publicly available Government data on housebuilding, housing stock and population so that the data runs up to the present day.   
 
 ## Using this data 
 ### Dependencies 
@@ -69,6 +66,9 @@ Population Estimates for England and Wales: https://www.ons.gov.uk/peoplepopulat
 
 Historic Census data on 'household spaces' and 'households': NOMIS - https://www.nomisweb.co.uk/ 
 
+MHCLG Table 123: 
+https://www.gov.uk/government/statistical-data-sets/live-tables-on-net-supply-of-housing
+
 MHCLG Table 253: https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
 
 MHCLG Affordable Housing Open Data (processed by Script 0 into useable range of formats): https://www.gov.uk/government/statistical-data-sets/live-tables-on-house-building 
@@ -77,7 +77,7 @@ MHCLG Table 125: https://www.gov.uk/government/statistical-data-sets/live-tables
 
 ## Roadmap
 
-- Review post-2010 data on housebuilding
+Work to improve this repository & data within includes: 
 
 - Redo 1974-1992 estimates for population and stock at the district level for North Yorkshire, Herefordshire, Worcestershire, and Humberside, which undergo locally significant internal boundary changes in the 1990s. Until then, counties are the best geography for analysing these areas
 
