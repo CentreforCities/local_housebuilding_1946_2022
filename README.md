@@ -12,7 +12,7 @@ Social housing and the public sector: https://www.centreforcities.org/publicatio
 
 New towns and land value capture: https://www.centreforcities.org/publication/restarting-housebuilding-iii-new-towns-and-land-value-capture/
 
-(note: workbooks and scripts which match exactly to those uses for the above reports are now in the Archive folder, following minor improvements made in April 2025)
+*Note: workbooks and scripts matched exactly to those used for the above reports are now in the Archive folder, following minor April 2025 updates*
 
  Data available is as follows:
  
