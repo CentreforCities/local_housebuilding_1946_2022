@@ -503,6 +503,16 @@ gross_public_building_ENG <- gross_public_building %>%
   select(-equiv_1971_nm) %>% 
   summarise(across(everything(), sum, na.rm = TRUE))
 
+gross_LA_building_ENG <- gross_LA_building %>% 
+  select(-equiv_1971_cd) %>% 
+  select(-equiv_1971_nm) %>% 
+  summarise(across(everything(), sum, na.rm = TRUE))
+
+gross_HA_building_ENG <- gross_HA_building %>% 
+  select(-equiv_1971_cd) %>% 
+  select(-equiv_1971_nm) %>% 
+  summarise(across(everything(), sum, na.rm = TRUE))
+
 gross_private_building_ENG <- gross_private_building %>% 
   select(-equiv_1971_cd) %>% 
   select(-equiv_1971_nm) %>% 
@@ -679,12 +689,12 @@ df_list_geog <- list(population_cty_1981, stocks_cty_1981, built_minus_demos_cty
                      gross_private_building_cty_1981, gross_public_building_cty_1981, housebuilding_rate_cty, private_housebuilding_rate_cty, public_housebuilding_rate_cty, 
                      LA_housebuilding_rate_cty, HA_housebuilding_rate_cty,
                      population_PUA, stocks_PUA, built_minus_demos_PUA, gross_all_building_PUA, gross_private_building_PUA, gross_public_building, gross_LA_building_PUA, gross_HA_building_PUA, 
-                     population_ENG, stocks_ENG, gross_total_building_ENG, gross_public_building_ENG, gross_private_building_ENG)
+                     population_ENG, stocks_ENG, gross_total_building_ENG, gross_public_building_ENG, gross_private_building_ENG, gross_LA_building_ENG, gross_HA_building_ENG)
 names(df_list_geog) <- c("population_cty_1981", "stocks_cty_1981", "built_minus_demos_cty_1981", "gross_all_building_cty_1981", "gross_LA_building_cty_1981",
                          "gross_HA_building_cty_1981", "gross_private_building_cty_1981", "gross_public_building_cty_1981", "total_building_rate_cty_1981", "private_building_rate_cty_1981", 
                          "public_building_rate_cty_1981", "LA_building_rate_cty_1981", "HA_building_rate_cty_1981",
                          "population_PUA", "stocks_PUA", "built_minus_demos_PUA", "gross_total_PUA", "gross_private_PUA", "gross_public_PUA", "gross_LA_PUA", "gross_HA_PUA", 
-                         "population_ENG", "stocks_ENG", "gross_total_building_ENG", "gross_public_building_ENG", "gross_private_building_ENG")                             
+                         "population_ENG", "stocks_ENG", "gross_total_building_ENG", "gross_public_building_ENG", "gross_private_building_ENG", "gross_LA_building_ENG", "gross_HA_building_ENG")                             
 
 # Export data frames to Excel
 export_to_excel(df_list_geog, file_path_geog) 

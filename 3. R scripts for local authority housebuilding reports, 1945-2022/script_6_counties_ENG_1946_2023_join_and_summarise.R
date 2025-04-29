@@ -216,28 +216,81 @@ export_to_excel(df_list_geog, file_path_geog)
 # Get today's date in the format "YYYY-MM-DD"
 today <- format(Sys.Date(), "%Y-%m-%d")
 
+# a small proportion of affordable housebuilding data from T1011 doesn't have geography - so not possible to include in LA or County-level data. 
+# But bring in here from affordable housebuilding summary so no missing data
+# note, this means that England AH totals won't match sum of smaller geographies
+
+path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Affordable housebuilding/", collapse = NULL)
+setwd(path) 
+
+file_name <- paste0(today, "affordable_housing_summaries_lad_2023.xlsx")
+
+#bring in LA level AH data 
+gross_public_building_91_23 <- read.xlsx(file_name, sheet = "any_tenure_any_provider")
+gross_LA_building_91_23 <- read.xlsx(file_name, sheet = "LA")
+gross_HA_building_91_23 <- read.xlsx(file_name, sheet = "HA")
+gross_S106nilgrant_building_91_23 <- read.xlsx(file_name, sheet = "s106_nogrant")
+gross_grant_building_91_23 <- read.xlsx(file_name, sheet = "grant_any")
+
+#sum all rows for each AH dataset
+gross_public_building_91_23 <- gross_public_building_91_23 %>%
+  select(where(is.numeric)) %>%                                # Keep numeric columns
+  select(matches("^\\d{4}$")) %>%                              # Keep only 4-digit column names
+  summarise(across(everything(), sum, na.rm = TRUE))           # Sum each column
+gross_LA_building_91_23 <- gross_LA_building_91_23 %>%
+  select(where(is.numeric)) %>%                                # Keep numeric columns
+  select(matches("^\\d{4}$")) %>%                              # Keep only 4-digit column names
+  summarise(across(everything(), sum, na.rm = TRUE))           # Sum each column
+gross_HA_building_91_23 <- gross_HA_building_91_23 %>%
+  select(where(is.numeric)) %>%                                # Keep numeric columns
+  select(matches("^\\d{4}$")) %>%                              # Keep only 4-digit column names
+  summarise(across(everything(), sum, na.rm = TRUE))           # Sum each column
+gross_S106nilgrant_building_91_23 <- gross_S106nilgrant_building_91_23%>%
+  select(where(is.numeric)) %>%                                # Keep numeric columns
+  select(matches("^\\d{4}$")) %>%                              # Keep only 4-digit column names
+  summarise(across(everything(), sum, na.rm = TRUE))           # Sum each column
+gross_grant_building_91_23 <- gross_grant_building_91_23 %>%
+  select(where(is.numeric)) %>%                                # Keep numeric columns
+  select(matches("^\\d{4}$")) %>%                              # Keep only 4-digit column names
+  summarise(across(everything(), sum, na.rm = TRUE))           # Sum each column
+
 path = paste0(dirname, "/centre for Cities/Centre for Cities POC - Documents/Research/Housing/History of Planning 2/Data/Output/From R scripts/Housebuilding/", collapse = NULL)
 setwd(path) 
 
 # Construct the file name dynamically
 file_name <- paste0(today, "FINAL_74_23_summarised_data_output.xlsx")
 
-#bring in 1974-2023 data at 1981 counties
+#bring in 1974-2023 data 
 population_74_23 <- read.xlsx(file_name, sheet = "population_ENG")
 stock_74_23 <- read.xlsx(file_name, sheet = "stocks_ENG")
 gross_all_building_74_23 <- read.xlsx(file_name, sheet = "total_building_ENG")
 gross_market_building_74_23 <- read.xlsx(file_name, sheet = "market_building_ENG")
 gross_private_delivered_74_23 <- read.xlsx(file_name, sheet = "private_delivered_ENG")
 gross_public_building_74_23 <- read.xlsx(file_name, sheet = "public_building_ENG")
+gross_LA_building_74_23 <- read.xlsx(file_name, sheet = "LA_building_ENG")
+gross_HA_building_74_23 <- read.xlsx(file_name, sheet = "HA_building_ENG")
+
+#replace 91 data onward with T1011 data which includes rows without geography 
+common_years <- intersect(
+  names(gross_public_building_74_23),
+  names(gross_public_building_91_23)
+)
+common_years <- common_years[grepl("^\\d{4}$", common_years)]
+
+gross_public_building_74_23[common_years] <- gross_public_building_91_23[common_years]
+gross_LA_building_74_23[common_years] <- gross_LA_building_91_23[common_years]
+gross_HA_building_74_23[common_years] <- gross_HA_building_91_23[common_years]
 
 file_name <- paste0(today, "FINAL_45_73_summarised_data_output.xlsx")
 
-#bring in 1946-1973 data at 1981 counties 
+#bring in 1946-1973 data  
 population_46_73 <- read.xlsx(file_name,  sheet = "population_ENG")
 stock_45_73 <- read.xlsx(file_name,  sheet = "stocks_ENG")
 gross_total_building_46_73 <- read.xlsx(file_name,  sheet = "gross_total_building_ENG")
 gross_private_building_46_73 <- read.xlsx(file_name,  sheet = "gross_private_building_ENG")
 gross_public_building_46_73 <- read.xlsx(file_name,  sheet = "gross_public_building_ENG")
+gross_LA_building_46_73 <- read.xlsx(file_name, sheet = "gross_LA_building_ENG")
+gross_HA_building_46_73 <- read.xlsx(file_name, sheet = "gross_HA_building_ENG")
 
 # Function to add 'Country' column at the beginning
 add_country_column <- function(df) {
@@ -252,13 +305,18 @@ gross_all_building_74_23 <- add_country_column(gross_all_building_74_23)
 gross_market_building_74_23 <- add_country_column(gross_market_building_74_23)
 gross_private_delivered_74_23 <- add_country_column(gross_private_delivered_74_23)
 gross_public_building_74_23 <- add_country_column(gross_public_building_74_23)
+gross_LA_building_74_23 <- add_country_column(gross_LA_building_74_23)
+gross_HA_building_74_23 <- add_country_column(gross_HA_building_74_23)
+gross_S106nilgrant_building_91_23 <- add_country_column(gross_S106nilgrant_building_91_23)
+gross_grant_building_91_23 <- add_country_column(gross_grant_building_91_23)
 
 population_46_73 <- add_country_column(population_46_73)
 stock_45_73 <- add_country_column(stock_45_73)
 gross_total_building_46_73 <- add_country_column(gross_total_building_46_73)
 gross_private_building_46_73 <- add_country_column(gross_private_building_46_73)
 gross_public_building_46_73 <- add_country_column(gross_public_building_46_73)
-
+gross_LA_building_46_73 <- add_country_column(gross_LA_building_46_73)
+gross_HA_building_46_73 <- add_country_column(gross_HA_building_46_73)
 
 #join them! 
 population <- left_join(population_46_73, population_74_23, by = "Country") %>%
@@ -291,6 +349,12 @@ gross_private_delivered <- left_join(gross_private_building_46_73, gross_private
 
 gross_public_built <- left_join(gross_public_building_46_73, gross_public_building_74_23, by = "Country") %>%
   rename_with(~ gsub("_COMPLETED_PUBLIC", "", .), everything())
+
+gross_LA_built <- left_join(gross_LA_building_46_73, gross_LA_building_74_23, by = "Country") %>%
+  rename_with(~ gsub("_COMPLETED_LOCAL", "", .), everything())
+
+gross_HA_built <- left_join(gross_HA_building_46_73, gross_HA_building_74_23, by = "Country") %>%
+  rename_with(~ gsub("_COMPLETED_HA", "", .), everything())
 
 ##### NOTE should add HA and LA to complete this
 
@@ -325,12 +389,36 @@ gross_public_built_long <- gross_public_built %>%
                names_to = "YEAR",  
                values_to = "gross_public_built")  
 
+gross_LA_built_long <- gross_LA_built %>%
+  pivot_longer(cols = -Country,          
+               names_to = "YEAR",  
+               values_to = "gross_LA_built") 
+
+gross_HA_built_long <- gross_HA_built %>%
+  pivot_longer(cols = -Country,          
+               names_to = "YEAR",  
+               values_to = "gross_HA_built")  
+
+gross_S106nilgrant_built_long <- gross_S106nilgrant_building_91_23 %>%
+  pivot_longer(cols = -Country,          
+               names_to = "YEAR",  
+               values_to = "gross_S106nilgrant_building_91_23") 
+
+gross_grant_built_long <- gross_grant_building_91_23 %>%
+  pivot_longer(cols = -Country,          
+               names_to = "YEAR",  
+               values_to = "gross_grant_building_91_23") 
+
 #join them into one dataframe 
 ENG_data <- left_join(stock_long, population_long, by = "YEAR")
 ENG_data <- left_join(ENG_data, gross_total_built_long, by = "YEAR")
 ENG_data <- left_join(ENG_data, gross_market_built_long, by = "YEAR")
 ENG_data <- left_join(ENG_data, gross_private_delivered_long, by = "YEAR")
 ENG_data <- left_join(ENG_data, gross_public_built_long, by = "YEAR")
+ENG_data <- left_join(ENG_data, gross_LA_built_long, by = "YEAR")
+ENG_data <- left_join(ENG_data, gross_HA_built_long, by = "YEAR")
+ENG_data <- left_join(ENG_data, gross_S106nilgrant_built_long, by = "YEAR")
+ENG_data <- left_join(ENG_data, gross_grant_built_long, by = "YEAR")
 
 ENG_data <- ENG_data[ , !grepl("Country", names(ENG_data))]
 
@@ -343,8 +431,10 @@ dir_path_geog = paste0(dirname, "/centre for Cities/Centre for Cities POC - Docu
 file_path_geog <- file.path(dir_path_geog, file_name_geog)
 
 # Create a list of data frames
-df_list_geog <- list(ENG_data, population, stock, gross_total_built, gross_market_built, gross_private_delivered, gross_public_built)
-names(df_list_geog) <- c("England_data_table", "population", "stock", "gross_total_built", "gross_market_built", "gross_private_delivered", "gross_public_built")                         
+df_list_geog <- list(ENG_data, population, stock, gross_total_built, gross_market_built, gross_private_delivered, gross_public_built, gross_LA_built, gross_HA_built, 
+                     gross_S106nilgrant_building_91_23, gross_grant_building_91_23)
+names(df_list_geog) <- c("England_data_table", "population", "stock", "gross_total_built", "gross_market_built", "gross_private_delivered", "gross_public_built", "gross_LA_built", "gross_HA_built", 
+                         "gross_S106nilgrant_built", "gross_grant_built")                         
 
 # Export data frames to Excel
 export_to_excel(df_list_geog, file_path_geog)
